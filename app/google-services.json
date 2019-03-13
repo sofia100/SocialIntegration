@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "927326204286",
+    "firebase_url": "https://socialintegration-378aa.firebaseio.com",
+    "project_id": "socialintegration-378aa",
+    "storage_bucket": "socialintegration-378aa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:927326204286:android:5d0665d7d7461a42",
+        "android_client_info": {
+          "package_name": "com.example.android.socialintegration"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "927326204286-cpg7a8phrhboctfdb0c33c56aph1dc5q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.android.socialintegration",
+            "certificate_hash": "4923ffaed5c54726b57f5c7482d7e2056faf0ea3"
+          }
+        },
+        {
+          "client_id": "927326204286-k6m0reuo9c7m08uurbv842brk2ojdblv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZJQhQoYWSOTxdJvpdY0knVEHvKMsaGD8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "927326204286-k6m0reuo9c7m08uurbv842brk2ojdblv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
