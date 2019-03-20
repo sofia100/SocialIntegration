@@ -32,27 +32,21 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
-    FirebaseAuth firebaseAuth;
-    FirebaseUser firebaseUser;
     CallbackManager callbackManager;
     LoginButton loginButton;
     TextView profileName;
     ImageView profilePic;
+    FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-        firebaseAuth=FirebaseAuth.getInstance();
-        firebaseUser=firebaseAuth.getCurrentUser();
-        if(firebaseUser==null)
-        {
+
             FacebookSdk.sdkInitialize(getApplicationContext());
 //    AppEventsLogger.activateApp(this);
             profileName=findViewById(R.id.profile_name);
@@ -60,43 +54,33 @@ public class MainActivity extends AppCompatActivity {
             loginButton=findViewById(R.id.login_button);
             callbackManager=CallbackManager.Factory.create();
             loginButton.setReadPermissions(Arrays.asList("public_profile"));
-            loginButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+
                     LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
                         @Override
                         public void onSuccess(LoginResult loginResult) {
 
-                          //  Toast.makeText(getApplicationContext(),"CALLBACK SUCCESSFUL", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(),"CALLBACK SUCCESSFUL", Toast.LENGTH_SHORT).show();
 
                             handleFacebookToken(loginResult.getAccessToken());
 
+                            loginResult.getAccessToken().getUserId();
 
                         }
 
                         @Override
                         public void onCancel() {
                             Toast.makeText(getApplicationContext(),"CALLBACK CANCELLED", Toast.LENGTH_SHORT).show();
-
                         }
 
                         @Override
                         public void onError(FacebookException error) {
 
+                            Log.v("activity",error.toString()+" error ");
                             Toast.makeText(getApplicationContext(),"CALLBACK ERROR"+error.toString(), Toast.LENGTH_LONG).show();
-
-
                         }
                     });
-                }
-            });
+        }
 
-        }
-        else
-        {
-          updateUi(firebaseUser);
-        }
-  }
 
     private void handleFacebookToken(AccessToken accessToken) {
 
@@ -107,6 +91,8 @@ public class MainActivity extends AppCompatActivity {
 
                 if(task.isSuccessful())
                 {
+                    Toast.makeText(getApplicationContext(),"able to register to firebase", Toast.LENGTH_SHORT).show();
+
                     FirebaseUser myuser= firebaseAuth.getCurrentUser();
                     updateUi(myuser);
 
@@ -119,13 +105,18 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode,resultCode,data);
+        Toast.makeText(getApplicationContext(),"activity result", Toast.LENGTH_SHORT).show();
+
     }
 
     private void updateUi(FirebaseUser myuser) {
+        Toast.makeText(getApplicationContext(),"update ui", Toast.LENGTH_SHORT).show();
+
 
         profilePic.setImageURI(myuser.getPhotoUrl());
         profileName.setText(myuser.getDisplayName());
