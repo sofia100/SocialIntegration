@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
                     LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
                         @Override
                         public void onSuccess(LoginResult loginResult) {
+                            Log.v("activity",loginResult.toString()+" successs ");
 
                             Toast.makeText(getApplicationContext(),"CALLBACK SUCCESSFUL", Toast.LENGTH_SHORT).show();
 
