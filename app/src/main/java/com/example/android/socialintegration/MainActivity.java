@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
             profilePic=findViewById(R.id.profile_pic);
             loginButton=findViewById(R.id.login_button);
             callbackManager=CallbackManager.Factory.create();
-            loginButton.setReadPermissions(Arrays.asList("public_profile"));
+            loginButton.setReadPermissions("email", "public_profile");//, "user_friends");
 
                     LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
                         @Override
