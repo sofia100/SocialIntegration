@@ -31,6 +31,7 @@ import com.google.firebase.auth.FacebookAuthCredential;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.TwitterAuthProvider;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.Twitter;
@@ -49,7 +50,15 @@ public class MainActivity extends AppCompatActivity {
     ImageView profilePic;
     FirebaseAuth firebaseAuth;
     TwitterLoginButton twitterLoginButton;
-
+    private FirebaseAuth mAuth;
+/*// ...
+@Override
+public void onStart() {
+    super.onStart();
+    // Check if user is signed in (non-null) and update UI accordingly.
+    FirebaseUser currentUser = mAuth.getCurrentUser();
+    updateUi(currentUser);
+}*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -58,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
         Twitter.initialize(this);
         setContentView(R.layout.activity_main);
 
+// Initialize Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
             FacebookSdk.sdkInitialize(getApplicationContext());
 //    AppEventsLogger.activateApp(this);
             profileName=findViewById(R.id.profile_name);
@@ -105,6 +116,9 @@ public class MainActivity extends AppCompatActivity {
                             secret=authToken.secret;
                             login(session);
 
+                            Log.d("mainActivity", "twitterLogin:success" + result);
+                            handleTwitterSession(result.data);
+
 
                         }
 
@@ -115,8 +129,35 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
         }
+    private void handleTwitterSession(TwitterSession session) {
+        Log.d("MainActivity", "handleTwitterSession:" + session);
 
-public void login(TwitterSession session)
+        AuthCredential credential = TwitterAuthProvider.getCredential(
+                session.getAuthToken().token,
+                session.getAuthToken().secret);
+
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d("mainActi", "signInWithCredential:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            updateUi(user);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w("mainActi", "signInWithCredential:failure", task.getException());
+                            Toast.makeText(MainActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                            updateUi(null);
+                        }
+
+                        // ...
+                    }
+                });
+    }
+    public void login(TwitterSession session)
 {
 String username = session.getUserName();
 Intent i = new Intent(MainActivity.this,ProfileActivity.class);
