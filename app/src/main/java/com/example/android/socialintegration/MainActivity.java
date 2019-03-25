@@ -31,6 +31,14 @@ import com.google.firebase.auth.FacebookAuthCredential;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.twitter.sdk.android.core.Callback;
+import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.Twitter;
+import com.twitter.sdk.android.core.TwitterAuthToken;
+import com.twitter.sdk.android.core.TwitterCore;
+import com.twitter.sdk.android.core.TwitterException;
+import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 
 import java.util.Arrays;
 
@@ -40,21 +48,27 @@ public class MainActivity extends AppCompatActivity {
     TextView profileName;
     ImageView profilePic;
     FirebaseAuth firebaseAuth;
+    TwitterLoginButton twitterLoginButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
 
+        Twitter.initialize(this);
         setContentView(R.layout.activity_main);
 
             FacebookSdk.sdkInitialize(getApplicationContext());
 //    AppEventsLogger.activateApp(this);
             profileName=findViewById(R.id.profile_name);
             profilePic=findViewById(R.id.profile_pic);
+            twitterLoginButton=findViewById(R.id.twitter_login_button);
             loginButton=findViewById(R.id.login_button);
-            callbackManager=CallbackManager.Factory.create();
-            loginButton.setReadPermissions("email", "public_profile");//, "user_friends");
+        loginButton.setReadPermissions("email", "public_profile");//, "user_friends");
 
+        callbackManager=CallbackManager.Factory.create();
+
+      //  loginButton.setReadPermissions("email", "public_profile", "user_friends");
                     LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
                         @Override
                         public void onSuccess(LoginResult loginResult) {
@@ -80,9 +94,35 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(),"CALLBACK ERROR"+error.toString(), Toast.LENGTH_LONG).show();
                         }
                     });
+
+                    twitterLoginButton.setCallback(new Callback<TwitterSession>() {
+                        @Override
+                        public void success(Result<TwitterSession> result) {
+                            TwitterSession session = TwitterCore.getInstance().getSessionManager().getActiveSession();
+                            TwitterAuthToken authToken = session.getAuthToken();
+                            String token,secret;
+                            token=authToken.token;
+                            secret=authToken.secret;
+                            login(session);
+
+
+                        }
+
+                        @Override
+                        public void failure(TwitterException exception) {
+                            Toast.makeText(MainActivity.this,"Authentication failed",Toast.LENGTH_SHORT).show();
+
+                        }
+                    });
         }
 
-
+public void login(TwitterSession session)
+{
+String username = session.getUserName();
+Intent i = new Intent(MainActivity.this,ProfileActivity.class);
+i.putExtra("username",username);
+startActivity(i);
+}
     private void handleFacebookToken(AccessToken accessToken) {
 
         AuthCredential authCredential= FacebookAuthProvider.getCredential(accessToken.getToken());
@@ -112,6 +152,8 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode,resultCode,data);
         Toast.makeText(getApplicationContext(),"activity result", Toast.LENGTH_SHORT).show();
+
+        twitterLoginButton.onActivityResult(requestCode,resultCode,data);
 
     }
 

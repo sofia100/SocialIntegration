@@ -2,5 +2,6 @@
     <string name="app_name">SocialIntegration</string>
     <string name="facebook_app_id">2241792249212567</string>
     <string name="fb_login_protocol_scheme">fb2241792249212567</string>
-
+<string name="twitter_key">cQUGYv1FeVgQcKXOyGkhCS7hS</string>
+    <string name="twitter_secret_key">aPxMR6dPIxPQnnnLFNfjb4bhGWr67hU2qlXUYdeBj6ChYkMts1</string>
 </resources>
