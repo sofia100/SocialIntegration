@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     ImageView profilePic;
     FirebaseAuth firebaseAuth;
     TwitterLoginButton twitterLoginButton;
-    private FirebaseAuth mAuth;
+  //  private FirebaseAuth mAuth;
 /*// ...
 @Override
 public void onStart() {
@@ -68,8 +68,8 @@ public void onStart() {
         setContentView(R.layout.activity_main);
 
 // Initialize Firebase Auth
-        mAuth = FirebaseAuth.getInstance();
-            FacebookSdk.sdkInitialize(getApplicationContext());
+     /*   mAuth = FirebaseAuth.getInstance();
+            FacebookSdk.sdkInitialize(getApplicationContext());*/
 //    AppEventsLogger.activateApp(this);
             profileName=findViewById(R.id.profile_name);
             profilePic=findViewById(R.id.profile_pic);
@@ -117,7 +117,7 @@ public void onStart() {
                             login(session);
 
                             Log.d("mainActivity", "twitterLogin:success" + result);
-                            handleTwitterSession(result.data);
+                           // handleTwitterSession(result.data);
 
 
                         }
@@ -129,7 +129,7 @@ public void onStart() {
                         }
                     });
         }
-    private void handleTwitterSession(TwitterSession session) {
+   /* private void handleTwitterSession(TwitterSession session) {
         Log.d("MainActivity", "handleTwitterSession:" + session);
 
         AuthCredential credential = TwitterAuthProvider.getCredential(
@@ -156,7 +156,7 @@ public void onStart() {
                         // ...
                     }
                 });
-    }
+    }*/
     public void login(TwitterSession session)
 {
 String username = session.getUserName();
